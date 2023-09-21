@@ -14,6 +14,14 @@ uint8_t get_ls_bits(uint64_t value, uint8_t size)
     return (uint8_t)(value & ((1 << size)-1));
 }
 
+
+/**
+ * @brief 
+ * 
+ * @param ones 
+ * @param zeros 
+ * @return uint8_t 
+ */
 uint8_t bit_mask(uint8_t ones, uint8_t zeros)
 {
     return ((1 << ones)-1) << zeros;
@@ -106,8 +114,5 @@ void set_bits(uint8_t* buffer, uint64_t offset, uint64_t bits, uint8_t size)
 
         // copy remaining 'size%8' bits to 'buffer'
         buffer[offset/8 + size/8] |= get_ls_bits(bits, size%8);
-
-        // consume least significant bits
-        bits >>= size%8;
     }
 }
