@@ -14,6 +14,11 @@ uint8_t get_ls_bits(uint64_t value, uint8_t size)
     return (uint8_t)(value & ((1 << size)-1));
 }
 
+uint8_t bit_mask(uint8_t ones, uint8_t zeros)
+{
+    return ((1 << ones)-1) << zeros;
+}
+
 
 /**
  * @brief This functions copies 'size' least significant bits of 'bits' to 'buffer' starting from 'offset' bit position.
@@ -47,6 +52,9 @@ void set_bits(uint8_t* buffer, uint64_t offset, uint64_t bits, uint8_t size)
         // if there are not enough bits, then pad with 'delta-size' zeros
         if (size < delta)
         {
+            // clear target bits of 'buffer'
+            buffer[offset/8] &= ~bit_mask(size, padding); 
+
             // copy bits to 'buffer'
             buffer[offset/8] |= get_ls_bits(bits, size) << padding;
 
@@ -58,6 +66,9 @@ void set_bits(uint8_t* buffer, uint64_t offset, uint64_t bits, uint8_t size)
 
         // otherwise consume 'delta' bits
         } else {
+            // clear target bits of 'buffer'
+            buffer[offset/8] &= ~bit_mask(delta, padding);
+
             // copy bits to buffer taking into account the need of padding zeros
             buffer[offset/8] |= get_ls_bits(bits, delta) << padding;
 
@@ -90,6 +101,9 @@ void set_bits(uint8_t* buffer, uint64_t offset, uint64_t bits, uint8_t size)
     // (e.g. if 'size == 11' then is needed to copy remaining 'size%8 == 3' bits)
     if (size%8 != 0)
     {
+        // clear target bits of 'buffer'
+        buffer[offset/8 + size/8] &= ~bit_mask(size%8, 0);
+
         // copy remaining 'size%8' bits to 'buffer'
         buffer[offset/8 + size/8] |= get_ls_bits(bits, size%8);
 
