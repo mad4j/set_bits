@@ -53,7 +53,6 @@ void set_bits(uint8_t* buffer, uint64_t offset, uint64_t bits, uint8_t size)
             // consume least significant bits
             bits >>= size;
 
-
             // no more bits to consume
             size = 0;
 
