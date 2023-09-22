@@ -8,7 +8,7 @@
  * @param size 
  * @return uint8_t 
  */
-uint8_t get_ls_bits(uint64_t value, uint8_t size) 
+static uint8_t get_ls_bits(uint64_t value, uint8_t size) 
 {
     // return 'size' least significant bits from 'value'
     return (uint8_t)(value & ((1 << size)-1));
@@ -22,7 +22,7 @@ uint8_t get_ls_bits(uint64_t value, uint8_t size)
  * @param zeros 
  * @return uint8_t 
  */
-uint8_t bit_mask(uint8_t ones, uint8_t zeros)
+static uint8_t bit_mask(uint8_t ones, uint8_t zeros)
 {
     return ((1 << ones)-1) << zeros;
 }
@@ -54,10 +54,10 @@ void set_bits(uint8_t* buffer, uint64_t offset, uint64_t bits, uint8_t size)
     // HEAD MANAGEMENT
     // if 'offset' is not byte aligned, then consumes enough bits to reach next byte boundary
     // (e.g. if 'offset == 34', then are needed to consume 'delta == 5' bits to reach next byte boundary)
-    if (o%8 != 0) 
+    if ((o%8uLL) != 0uLL) 
     {
         // number of padding zeros
-        uint8_t padding = o%8;
+        uint8_t padding = (uint8_t)(o%8uLL);
 
         // number of bits needed to reach next byte boundary
         uint8_t delta = 8 - padding;
