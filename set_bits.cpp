@@ -99,7 +99,7 @@ void set_bits(uint8_t* buffer, uint64_t offset, uint64_t bits, uint8_t size)
 
     // BODY MANAGEMENT
     // at this point 'offset' is byte aligned, then it is possible to consume whole bytes
-    for (uint64_t k = 0; k < s/8; k++)
+    for (uint64_t k = 0; k < (s/8); k++)
     {
         // copy a whole byte to 'buffer'
         buffer[o/8 + k] = get_ls_bits(b, 8);
