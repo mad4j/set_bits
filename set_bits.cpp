@@ -36,8 +36,8 @@ uint8_t bit_mask(uint8_t ones, uint8_t zeros)
  * // 00000000 00000000 00000000 00000000 00000000
  * uint8_t buffer[5] = { 0x00 };
  *   
- *  // 00000000 10111011 10101010 00000000 00000000
- *  set_bits(buffer, 8, 0xAABB, 16);
+ * // 00000000 10111011 10101010 00000000 00000000
+ * set_bits(buffer, 8, 0xAABB, 16);
  * 
  * @param buffer 
  * @param offset 
