@@ -1,0 +1,1 @@
+g++ set_bits_test.cpp set_bits.cpp -o set_bits
