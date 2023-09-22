@@ -1,5 +1,3 @@
-
-
 #include "utest/utest.h"
 #include "set_bits.h"
 
