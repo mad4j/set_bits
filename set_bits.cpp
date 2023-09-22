@@ -46,6 +46,10 @@ uint8_t bit_mask(uint8_t ones, uint8_t zeros)
  */
 void set_bits(uint8_t* buffer, uint64_t offset, uint64_t bits, uint8_t size)
 {
+
+    // avoid to modify function parameter
+    uint64_t value = bits;
+
     // HEAD MANAGEMENT
     // if 'offset' is not byte aligned, then consumes enough bits to reach next byte boundary
     // (e.g. if 'offset == 34', then are needed to consume 'delta == 5' bits to reach next byte boundary)
@@ -64,10 +68,10 @@ void set_bits(uint8_t* buffer, uint64_t offset, uint64_t bits, uint8_t size)
             buffer[offset/8] &= ~bit_mask(size, padding); 
 
             // copy bits to 'buffer'
-            buffer[offset/8] |= get_ls_bits(bits, size) << padding;
+            buffer[offset/8] |= get_ls_bits(value, size) << padding;
 
             // consume least significant bits
-            bits >>= size;
+            value >>= size;
 
             // no more bits to consume
             size = 0;
@@ -78,10 +82,10 @@ void set_bits(uint8_t* buffer, uint64_t offset, uint64_t bits, uint8_t size)
             buffer[offset/8] &= ~bit_mask(delta, padding);
 
             // copy bits to buffer taking into account the need of padding zeros
-            buffer[offset/8] |= get_ls_bits(bits, delta) << padding;
+            buffer[offset/8] |= get_ls_bits(value, delta) << padding;
 
             // consume least significant bits
-            bits >>= delta;
+            value >>= delta;
 
             // adjust remaining bits size
             size -= delta;
@@ -97,10 +101,10 @@ void set_bits(uint8_t* buffer, uint64_t offset, uint64_t bits, uint8_t size)
     for (uint64_t k = 0; k < size/8; k++)
     {
         // copy a whole byte to 'buffer'
-        buffer[offset/8 + k] = get_ls_bits(bits, 8);
+        buffer[offset/8 + k] = get_ls_bits(value, 8);
 
         // consume least significant bits
-        bits >>= 8;
+        value >>= 8;
     }
 
 
@@ -113,6 +117,6 @@ void set_bits(uint8_t* buffer, uint64_t offset, uint64_t bits, uint8_t size)
         buffer[offset/8 + size/8] &= ~bit_mask(size%8, 0);
 
         // copy remaining 'size%8' bits to 'buffer'
-        buffer[offset/8 + size/8] |= get_ls_bits(bits, size%8);
+        buffer[offset/8 + size/8] |= get_ls_bits(value, size%8);
     }
 }
