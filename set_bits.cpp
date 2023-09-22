@@ -48,15 +48,16 @@ void set_bits(uint8_t* buffer, uint64_t offset, uint64_t bits, uint8_t size)
 {
 
     // avoid to modify function parameter
-    uint64_t value = bits;
+    uint64_t o = offset;
+    uint64_t b = bits;
 
     // HEAD MANAGEMENT
     // if 'offset' is not byte aligned, then consumes enough bits to reach next byte boundary
     // (e.g. if 'offset == 34', then are needed to consume 'delta == 5' bits to reach next byte boundary)
-    if (offset%8 != 0) 
+    if (o%8 != 0) 
     {
         // number of padding zeros
-        uint8_t padding = offset%8;
+        uint8_t padding = o%8;
 
         // number of bits needed to reach next byte boundary
         uint8_t delta = 8 - padding;
@@ -65,13 +66,13 @@ void set_bits(uint8_t* buffer, uint64_t offset, uint64_t bits, uint8_t size)
         if (size < delta)
         {
             // clear target bits of 'buffer'
-            buffer[offset/8] &= ~bit_mask(size, padding); 
+            buffer[o/8] &= ~bit_mask(size, padding); 
 
             // copy bits to 'buffer'
-            buffer[offset/8] |= get_ls_bits(value, size) << padding;
+            buffer[o/8] |= get_ls_bits(b, size) << padding;
 
             // consume least significant bits
-            value >>= size;
+            b >>= size;
 
             // no more bits to consume
             size = 0;
@@ -79,13 +80,13 @@ void set_bits(uint8_t* buffer, uint64_t offset, uint64_t bits, uint8_t size)
         // otherwise consume 'delta' bits
         } else {
             // clear target bits of 'buffer'
-            buffer[offset/8] &= ~bit_mask(delta, padding);
+            buffer[o/8] &= ~bit_mask(delta, padding);
 
             // copy bits to buffer taking into account the need of padding zeros
-            buffer[offset/8] |= get_ls_bits(value, delta) << padding;
+            buffer[o/8] |= get_ls_bits(b, delta) << padding;
 
             // consume least significant bits
-            value >>= delta;
+            b >>= delta;
 
             // adjust remaining bits size
             size -= delta;
@@ -101,10 +102,10 @@ void set_bits(uint8_t* buffer, uint64_t offset, uint64_t bits, uint8_t size)
     for (uint64_t k = 0; k < size/8; k++)
     {
         // copy a whole byte to 'buffer'
-        buffer[offset/8 + k] = get_ls_bits(value, 8);
+        buffer[offset/8 + k] = get_ls_bits(b, 8);
 
         // consume least significant bits
-        value >>= 8;
+        b >>= 8;
     }
 
 
@@ -117,6 +118,6 @@ void set_bits(uint8_t* buffer, uint64_t offset, uint64_t bits, uint8_t size)
         buffer[offset/8 + size/8] &= ~bit_mask(size%8, 0);
 
         // copy remaining 'size%8' bits to 'buffer'
-        buffer[offset/8 + size/8] |= get_ls_bits(value, size%8);
+        buffer[offset/8 + size/8] |= get_ls_bits(b, size%8);
     }
 }
