@@ -13,6 +13,6 @@
 */
 
 // Set buffer with bit aligned values and LSB-first order
-void set_bits(uint8_t* buffer, uint64_t offset, uint64_t bits, uint8_t size);
+void set_bits(uint8_t* buffer, uint32_t offset, uint64_t bits, uint8_t size);
 
 #endif //SETBITS_H
