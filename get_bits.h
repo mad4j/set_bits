@@ -1,5 +1,5 @@
-#ifndef SETBITS_H
-#define SETBITS_H
+#ifndef GETBITS_H
+#define GETBITS_H
 
 #include <cstdint>
 
@@ -13,7 +13,7 @@
     M[2] ...
 */
 
-// Set buffer with bit aligned values and LSB-first order
-void set_bits(uint8_t* buffer, uint32_t offset, uint64_t bits, uint8_t size);
+// Get bit aligned values from buffer
+uint64_t get_bits(uint8_t* buffer, uint32_t offset, uint8_t size);
 
-#endif //SETBITS_H
+#endif //GETBITS_H
